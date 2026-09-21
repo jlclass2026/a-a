@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cool Zap - Learning Arcade</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #090a16;
+      --card-bg: #13172e;
+      --neon-cyan: #00f0ff;
+      --neon-yellow: #ffe600;
+      --neon-pink: #ff0077;
+      --neon-green: #00ff66;
+      --neon-purple: #9d4edd;
+      --text: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Chakra Petch', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 16px;
+      background: radial-gradient(circle at top, #181d3d 0%, var(--bg-dark) 100%);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    header {
+      max-width: 960px;
+      margin: 0 auto 20px auto;
+      background: rgba(19, 23, 46, 0.85);
+      border: 2px solid var(--neon-cyan);
+      border-radius: 20px;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.35);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .zap-logo {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, var(--neon-yellow), var(--neon-pink));
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      box-shadow: 0 0 16px var(--neon-yellow);
+    }
+
+    h1 {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 28px;
+      letter-spacing: 2px;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+      line-height: 1;
+    }
+
+    .sub-brand {
+      font-size: 13px;
+      color: #94a3b8;
+      font-weight: 600;
+      margin-top: 3px;
+    }
+
+    /* Screen Views */
+    .view-screen {
+      display: none;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .view-screen.active {
+      display: block;
+      animation: fadeIn 0.25s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* HUB MENU (4 tiles as sketched) */
+    .hub-title {
+      text-align: center;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 26px;
+      color: var(--neon-yellow);
+      margin-bottom: 24px;
+      text-shadow: 0 0 10px rgba(255, 230, 0, 0.4);
+    }
+
+    .tiles-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .tiles-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .subject-tile {
+      background: var(--card-bg);
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 30px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .subject-tile::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .subject-tile:hover::after {
+      opacity: 1;
+    }
+
+    .tile-math { border-color: var(--neon-yellow); }
+    .tile-math:hover { box-shadow: 0 0 25px rgba(255, 230, 0, 0.4); transform: translateY(-5px); }
+
+    .tile-lit { border-color: var(--neon-pink); }
+    .tile-lit:hover { box-shadow: 0 0 25px rgba(255, 0, 119, 0.4); transform: translateY(-5px); }
+
+    .tile-health { border-color: var(--neon-green); }
+    .tile-health:hover { box-shadow: 0 0 25px rgba(0, 255, 102, 0.4); transform: translateY(-5px); }
+
+    .tile-sci { border-color: var(--neon-cyan); }
+    .tile-sci:hover { box-shadow: 0 0 25px rgba(0, 240, 255, 0.4); transform: translateY(-5px); }
+
+    .tile-icon {
+      font-size: 44px;
+      margin-bottom: 10px;
+    }
+
+    .tile-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    /* 4-PLAYER MATHS ARENA */
+    .arena-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .btn-back {
+      background: #1e2448;
+      color: #fff;
+      border: 2px solid #3b4578;
+      border-radius: 12px;
+      padding: 8px 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .mode-select-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .mode-chip {
+      background: #1e2448;
+      border: 2px solid #3b4578;
+      color: #94a3b8;
+      padding: 6px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .mode-chip.active {
+      border-color: var(--neon-yellow);
+      color: var(--neon-yellow);
+      box-shadow: 0 0 10px rgba(255, 230, 0, 0.3);
+    }
+
+    .arena-screen {
+      background: #0f1326;
+      border: 3px solid var(--neon-cyan);
+      border-radius: 24px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 0 30px rgba(0, 240, 255, 0.25);
+      position: relative;
+    }
+
+    .question-box {
+      background: #181f3d;
+      border: 2px dashed #3a4785;
+      border-radius: 18px;
+      padding: 20px;
+      max-width: 500px;
+      margin: 0 auto 20px auto;
+    }
+
+    .question-prompt {
+      font-size: 13px;
+      color: var(--neon-cyan);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-weight: 700;
+    }
+
+    .question-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 46px;
+      font-weight: 900;
+      color: #ffffff;
+      margin: 10px 0;
+      letter-spacing: 2px;
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    }
+
+    /* 4 Player Stations */
+    .players-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 720px) {
+      .players-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .player-dock {
+      background: #151a36;
+      border-radius: 18px;
+      padding: 16px 12px;
+      border: 2px solid;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .p-red { border-color: #ff3366; }
+    .p-blue { border-color: #00d4ff; }
+    .p-green { border-color: #00ff88; }
+    .p-yellow { border-color: #ffea00; }
+
+    .p-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 14px;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+
+    .p-score {
+      font-size: 24px;
+      font-weight: 900;
+      font-family: 'Orbitron', sans-serif;
+      margin-bottom: 12px;
+    }
+
+    .btn-zap {
+      width: 100%;
+      padding: 12px 6px;
+      font-size: 15px;
+      font-weight: 900;
+      font-family: 'Orbitron', sans-serif;
+      border: none;
+      border-radius: 12px;
+      color: #000;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: transform 0.1s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+
+    .btn-zap:active { transform: scale(0.94); }
+
+    .p-red .btn-zap { background: #ff3366; box-shadow: 0 0 12px rgba(255, 51, 102, 0.5); color: #fff; }
+    .p-blue .btn-zap { background: #00d4ff; box-shadow: 0 0 12px rgba(0, 212, 255, 0.5); }
+    .p-green .btn-zap { background: #00ff88; box-shadow: 0 0 12px rgba(0, 255, 136, 0.5); }
+    .p-yellow .btn-zap { background: #ffea00; box-shadow: 0 0 12px rgba(255, 234, 0, 0.5); }
+
+    /* Answer Modal */
+    .answer-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 6, 15, 0.85);
+      backdrop-filter: blur(5px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .answer-modal-overlay.active {
+      display: flex;
+    }
+
+    .answer-card {
+      background: #161c3b;
+      border: 3px solid var(--neon-yellow);
+      border-radius: 24px;
+      padding: 24px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 0 35px rgba(255, 230, 0, 0.3);
+    }
+
+    .ans-input {
+      width: 140px;
+      font-size: 36px;
+      text-align: center;
+      padding: 8px;
+      background: #0b0e1e;
+      border: 3px solid var(--neon-cyan);
+      border-radius: 14px;
+      color: #fff;
+      font-weight: 900;
+      font-family: 'Orbitron', sans-serif;
+      margin: 14px 0;
+      outline: none;
+    }
+
+    .btn-submit {
+      background: var(--neon-cyan);
+      color: #000;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: 900;
+      font-family: 'Orbitron', sans-serif;
+      border-radius: 12px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .msg-feedback {
+      font-size: 15px;
+      font-weight: 700;
+      margin-top: 12px;
+      min-height: 22px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <div class="zap-logo">&#9889;</div>
+      <div>
+        <h1>COOL ZAP</h1>
+        <div class="sub-brand">By Aukan &amp; August &bull; 3D Learning Game</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- HUB SCREEN: 4 Subjects as designed in their plan -->
+  <div class="view-screen active" id="screenHub">
+    <div class="hub-title">&#9889; WELCOME TO COOL ZAP &#9889;</div>
+    <div class="tiles-grid">
+      <!-- Math -->
+      <div class="subject-tile tile-math" onclick="openMathArena()">
+        <div class="tile-icon">&#128290;</div>
+        <div class="tile-name" style="color: var(--neon-yellow);">MATH</div>
+        <div style="color: #94a3b8; font-size: 14px; margin-top: 6px;">4-Player Zap Battle (1x - 10x &amp; Doubles)</div>
+      </div>
+
+      <!-- Literacy -->
+      <div class="subject-tile tile-lit" onclick="openQuickSubject('Literacy')">
+        <div class="tile-icon">&#128214;</div>
+        <div class="tile-name" style="color: var(--neon-pink);">LITERACY</div>
+        <div style="color: #94a3b8; font-size: 14px; margin-top: 6px;">Spelling &amp; Word Power</div>
+      </div>
+
+      <!-- Health -->
+      <div class="subject-tile tile-health" onclick="openQuickSubject('Health')">
+        <div class="tile-icon">&#10084;&#65039;</div>
+        <div class="tile-name" style="color: var(--neon-green);">HEALTH</div>
+        <div style="color: #94a3b8; font-size: 14px; margin-top: 6px;">Mind, Food &amp; Energy</div>
+      </div>
+
+      <!-- Science -->
+      <div class="subject-tile tile-sci" onclick="openQuickSubject('Science')">
+        <div class="tile-icon">&#128300;</div>
+        <div class="tile-name" style="color: var(--neon-cyan);">SCIENCE</div>
+        <div style="color: #94a3b8; font-size: 14px; margin-top: 6px;">Forces, Space &amp; Nature</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4-PLAYER MATHS ARENA -->
+  <div class="view-screen" id="screenMath">
+    <div class="arena-nav">
+      <button class="btn-back" onclick="showScreen('screenHub')">&#8592; Back to Hub</button>
+      <div class="mode-select-row">
+        <button class="mode-chip active" id="chip-mix" onclick="setMode('mix')">Doubles + Times</button>
+        <button class="mode-chip" id="chip-doubles" onclick="setMode('doubles')">Doubles (1+1 to 4+4)</button>
+        <button class="mode-chip" id="chip-times" onclick="setMode('times')">Times (1× to 10×)</button>
+      </div>
+    </div>
+
+    <div class="arena-screen">
+      <div class="question-box">
+        <div class="question-prompt">&#9889; FASTEST BUZZER ZAPS THE POINTS &#9889;</div>
+        <div class="question-text" id="qDisplay">2 + 2 = ?</div>
+      </div>
+
+      <!-- 4 Players (Aukan, August, Student 1, Student 2) -->
+      <div class="players-grid">
+        <div class="player-dock p-red">
+          <div class="p-name" style="color: #ff3366;">Aukan</div>
+          <div class="p-score" id="score-0">0 PTS</div>
+          <button class="btn-zap" onclick="playerBuzz(0)">ZAP!</button>
+        </div>
+
+        <div class="player-dock p-blue">
+          <div class="p-name" style="color: #00d4ff;">August</div>
+          <div class="p-score" id="score-1">0 PTS</div>
+          <button class="btn-zap" onclick="playerBuzz(1)">ZAP!</button>
+        </div>
+
+        <div class="player-dock p-green">
+          <div class="p-name" style="color: #00ff88;">Player 3</div>
+          <div class="p-score" id="score-2">0 PTS</div>
+          <button class="btn-zap" onclick="playerBuzz(2)">ZAP!</button>
+        </div>
+
+        <div class="player-dock p-yellow">
+          <div class="p-name" style="color: #ffea00;">Player 4</div>
+          <div class="p-score" id="score-3">0 PTS</div>
+          <button class="btn-zap" onclick="playerBuzz(3)">ZAP!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUZZER ANSWER POPUP -->
+  <div class="answer-modal-overlay" id="answerModal">
+    <div class="answer-card">
+      <h3 id="buzzingPlayer" style="margin: 0; font-family: 'Orbitron', sans-serif; font-size: 20px;"></h3>
+      <p style="color: #94a3b8; font-size: 13px; margin: 4px 0 0 0;">Enter the answer to score +2 Zap Points!</p>
+
+      <div style="font-size: 32px; font-weight: 900; margin: 12px 0; color: #fff;" id="modalQText"></div>
+      <input type="number" id="ansInput" class="ans-input" autocomplete="off" placeholder="?">
+
+      <button class="btn-submit" onclick="submitMathAns()">CONFIRM ZAP</button>
+      <div class="msg-feedback" id="modalFeedback"></div>
+    </div>
+  </div>
+
+  <script>
+    const players = [
+      { name: "Aukan", score: 0 },
+      { name: "August", score: 0 },
+      { name: "Player 3", score: 0 },
+      { name: "Player 4", score: 0 }
+    ];
+
+    let currentMode = "mix"; // 'mix', 'doubles', 'times'
+    let currentAnswer = 0;
+    let activePlayerIdx = null;
+
+    function showScreen(id) {
+      document.querySelectorAll('.view-screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    function openMathArena() {
+      showScreen('screenMath');
+      nextQuestion();
+    }
+
+    function openQuickSubject(subjectName) {
+      alert(`⚡ Cool Zap: ${subjectName} portal unlocked! 3D levels loading...`);
+    }
+
+    function setMode(mode) {
+      currentMode = mode;
+      document.getElementById('chip-mix').classList.toggle('active', mode === 'mix');
+      document.getElementById('chip-doubles').classList.toggle('active', mode === 'doubles');
+      document.getElementById('chip-times').classList.toggle('active', mode === 'times');
+      nextQuestion();
+    }
+
+    function nextQuestion() {
+      let isTimes = false;
+
+      if (currentMode === "times") {
+        isTimes = true;
+      } else if (currentMode === "doubles") {
+        isTimes = false;
+      } else {
+        // mix
+        isTimes = Math.random() > 0.5;
+      }
+
+      if (isTimes) {
+        // Times tables 1x to 10x
+        const a = Math.floor(Math.random() * 10) + 1;
+        const b = Math.floor(Math.random() * 10) + 1;
+        currentAnswer = a * b;
+        document.getElementById('qDisplay').textContent = `${a} × ${b} = ?`;
+      } else {
+        // Doubles addition (1+1, 2+2, 4+4, 8+8, etc.)
+        const doubles = [1, 2, 3, 4, 5, 6, 8, 10, 12];
+        const val = doubles[Math.floor(Math.random() * doubles.length)];
+        currentAnswer = val + val;
+        document.getElementById('qDisplay').textContent = `${val} + ${val} = ?`;
+      }
+    }
+
+    function playerBuzz(playerIdx) {
+      activePlayerIdx = playerIdx;
+      const p = players[playerIdx];
+
+      document.getElementById('buzzingPlayer').textContent = `⚡ ${p.name} BUZZED IN! ⚡`;
+      document.getElementById('modalQText').textContent = document.getElementById('qDisplay').textContent;
+      document.getElementById('ansInput').value = '';
+      document.getElementById('modalFeedback').textContent = '';
+
+      document.getElementById('answerModal').classList.add('active');
+      setTimeout(() => document.getElementById('ansInput').focus(), 80);
+    }
+
+    function submitMathAns() {
+      const val = parseInt(document.getElementById('ansInput').value, 10);
+      const fb = document.getElementById('modalFeedback');
+
+      if (isNaN(val)) return;
+
+      if (val === currentAnswer) {
+        players[activePlayerIdx].score += 2;
+        document.getElementById(`score-${activePlayerIdx}`).textContent = `${players[activePlayerIdx].score} PTS`;
+        fb.style.color = 'var(--neon-green)';
+        fb.textContent = '⚡ ZAP! CORRECT (+2 PTS) ⚡';
+
+        setTimeout(() => {
+          document.getElementById('answerModal').classList.remove('active');
+          nextQuestion();
+        }, 900);
+      } else {
+        fb.style.color = 'var(--neon-pink)';
+        fb.textContent = `❌ MISS! Answer was ${currentAnswer}`;
+
+        setTimeout(() => {
+          document.getElementById('answerModal').classList.remove('active');
+          nextQuestion();
+        }, 1300);
+      }
+    }
+
+    document.getElementById('ansInput').addEventListener('keyup', (e) => {
+      if (e.key === 'Enter') submitMathAns();
+    });
+  </script>
+</body>
+</html>
