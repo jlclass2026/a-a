@@ -6,11 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-dark: #090a16;
-      --card-bg: #13172e;
+      --bg-dark: #080914;
+      --card-bg: #12152b;
       --neon-cyan: #00f0ff;
       --neon-yellow: #ffe600;
       --neon-pink: #ff0077;
@@ -22,12 +22,13 @@
     * {
       box-sizing: border-box;
       font-family: 'Chakra Petch', sans-serif;
+      user-select: none;
     }
 
     body {
       margin: 0;
       padding: 16px;
-      background: radial-gradient(circle at top, #181d3d 0%, var(--bg-dark) 100%);
+      background: radial-gradient(circle at top, #191e42 0%, var(--bg-dark) 100%);
       color: var(--text);
       min-height: 100vh;
       overflow-x: hidden;
@@ -35,11 +36,11 @@
 
     header {
       max-width: 960px;
-      margin: 0 auto 20px auto;
-      background: rgba(19, 23, 46, 0.85);
+      margin: 0 auto 18px auto;
+      background: rgba(18, 21, 43, 0.9);
       border: 2px solid var(--neon-cyan);
       border-radius: 20px;
-      padding: 14px 24px;
+      padding: 12px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -53,21 +54,21 @@
     }
 
     .zap-logo {
-      width: 50px;
-      height: 50px;
+      width: 48px;
+      height: 48px;
       background: linear-gradient(135deg, var(--neon-yellow), var(--neon-pink));
       border-radius: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 28px;
+      font-size: 26px;
       box-shadow: 0 0 16px var(--neon-yellow);
     }
 
     h1 {
       margin: 0;
       font-family: 'Orbitron', sans-serif;
-      font-size: 28px;
+      font-size: 26px;
       letter-spacing: 2px;
       color: var(--neon-cyan);
       text-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
@@ -75,13 +76,13 @@
     }
 
     .sub-brand {
-      font-size: 13px;
+      font-size: 12px;
       color: #94a3b8;
       font-weight: 600;
       margin-top: 3px;
     }
 
-    /* Screen Views */
+    /* Views */
     .view-screen {
       display: none;
       max-width: 960px;
@@ -90,7 +91,7 @@
 
     .view-screen.active {
       display: block;
-      animation: fadeIn 0.25s ease;
+      animation: fadeIn 0.2s ease;
     }
 
     @keyframes fadeIn {
@@ -98,20 +99,20 @@
       to { opacity: 1; transform: scale(1); }
     }
 
-    /* HUB MENU (4 tiles as sketched) */
+    /* HUB MENU */
     .hub-title {
       text-align: center;
       font-family: 'Orbitron', sans-serif;
-      font-size: 26px;
+      font-size: 24px;
       color: var(--neon-yellow);
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       text-shadow: 0 0 10px rgba(255, 230, 0, 0.4);
     }
 
     .tiles-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
+      gap: 18px;
     }
 
     @media (max-width: 600px) {
@@ -123,59 +124,41 @@
     .subject-tile {
       background: var(--card-bg);
       border: 3px solid rgba(255, 255, 255, 0.1);
-      border-radius: 24px;
-      padding: 30px 20px;
+      border-radius: 22px;
+      padding: 26px 20px;
       text-align: center;
       cursor: pointer;
       transition: all 0.2s ease;
       box-shadow: 0 10px 25px rgba(0,0,0,0.5);
       position: relative;
-      overflow: hidden;
-    }
-
-    .subject-tile::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-
-    .subject-tile:hover::after {
-      opacity: 1;
     }
 
     .tile-math { border-color: var(--neon-yellow); }
-    .tile-math:hover { box-shadow: 0 0 25px rgba(255, 230, 0, 0.4); transform: translateY(-5px); }
-
-    .tile-lit { border-color: var(--neon-pink); }
-    .tile-lit:hover { box-shadow: 0 0 25px rgba(255, 0, 119, 0.4); transform: translateY(-5px); }
-
-    .tile-health { border-color: var(--neon-green); }
-    .tile-health:hover { box-shadow: 0 0 25px rgba(0, 255, 102, 0.4); transform: translateY(-5px); }
+    .tile-math:hover { box-shadow: 0 0 25px rgba(255, 230, 0, 0.4); transform: translateY(-4px); }
 
     .tile-sci { border-color: var(--neon-cyan); }
-    .tile-sci:hover { box-shadow: 0 0 25px rgba(0, 240, 255, 0.4); transform: translateY(-5px); }
+    .tile-sci:hover { box-shadow: 0 0 25px rgba(0, 240, 255, 0.4); transform: translateY(-4px); }
 
-    .tile-icon {
-      font-size: 44px;
-      margin-bottom: 10px;
-    }
+    .tile-health { border-color: var(--neon-green); }
+    .tile-health:hover { box-shadow: 0 0 25px rgba(0, 255, 102, 0.4); transform: translateY(-4px); }
 
+    .tile-lit { border-color: var(--neon-pink); }
+    .tile-lit:hover { box-shadow: 0 0 25px rgba(255, 0, 119, 0.4); transform: translateY(-4px); }
+
+    .tile-icon { font-size: 42px; margin-bottom: 8px; }
     .tile-name {
       font-family: 'Orbitron', sans-serif;
-      font-size: 26px;
+      font-size: 24px;
       font-weight: 900;
       letter-spacing: 1px;
     }
 
-    /* 4-PLAYER MATHS ARENA */
+    /* 4-PLAYER ARENA */
     .arena-nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .btn-back {
@@ -188,49 +171,26 @@
       cursor: pointer;
     }
 
-    .mode-select-row {
-      display: flex;
-      gap: 8px;
-    }
-
-    .mode-chip {
-      background: #1e2448;
-      border: 2px solid #3b4578;
-      color: #94a3b8;
-      padding: 6px 14px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 13px;
-    }
-
-    .mode-chip.active {
-      border-color: var(--neon-yellow);
-      color: var(--neon-yellow);
-      box-shadow: 0 0 10px rgba(255, 230, 0, 0.3);
-    }
-
     .arena-screen {
       background: #0f1326;
       border: 3px solid var(--neon-cyan);
       border-radius: 24px;
-      padding: 24px;
+      padding: 20px;
       text-align: center;
       box-shadow: 0 0 30px rgba(0, 240, 255, 0.25);
-      position: relative;
     }
 
     .question-box {
       background: #181f3d;
       border: 2px dashed #3a4785;
       border-radius: 18px;
-      padding: 20px;
-      max-width: 500px;
-      margin: 0 auto 20px auto;
+      padding: 16px;
+      max-width: 540px;
+      margin: 0 auto 16px auto;
     }
 
     .question-prompt {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--neon-cyan);
       text-transform: uppercase;
       letter-spacing: 1.5px;
@@ -239,20 +199,17 @@
 
     .question-text {
       font-family: 'Orbitron', sans-serif;
-      font-size: 46px;
+      font-size: 40px;
       font-weight: 900;
       color: #ffffff;
-      margin: 10px 0;
+      margin: 8px 0;
       letter-spacing: 2px;
-      text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
     }
 
-    /* 4 Player Stations */
     .players-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-      margin-top: 14px;
+      gap: 12px;
     }
 
     @media (max-width: 720px) {
@@ -264,7 +221,7 @@
     .player-dock {
       background: #151a36;
       border-radius: 18px;
-      padding: 16px 12px;
+      padding: 14px 10px;
       border: 2px solid;
       display: flex;
       flex-direction: column;
@@ -280,14 +237,14 @@
       font-family: 'Orbitron', sans-serif;
       font-size: 14px;
       font-weight: 900;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
 
     .p-score {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 900;
       font-family: 'Orbitron', sans-serif;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .btn-zap {
@@ -307,42 +264,46 @@
     }
 
     .btn-zap:active { transform: scale(0.94); }
-
     .p-red .btn-zap { background: #ff3366; box-shadow: 0 0 12px rgba(255, 51, 102, 0.5); color: #fff; }
     .p-blue .btn-zap { background: #00d4ff; box-shadow: 0 0 12px rgba(0, 212, 255, 0.5); }
     .p-green .btn-zap { background: #00ff88; box-shadow: 0 0 12px rgba(0, 255, 136, 0.5); }
     .p-yellow .btn-zap { background: #ffea00; box-shadow: 0 0 12px rgba(255, 234, 0, 0.5); }
 
-    /* Answer Modal */
-    .answer-modal-overlay {
+    /* Modal Screens */
+    .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(4, 6, 15, 0.85);
-      backdrop-filter: blur(5px);
+      background: rgba(4, 6, 15, 0.88);
+      backdrop-filter: blur(6px);
       display: none;
       align-items: center;
       justify-content: center;
       z-index: 1000;
+      padding: 16px;
     }
 
-    .answer-modal-overlay.active {
-      display: flex;
-    }
+    .modal-overlay.active { display: flex; }
 
-    .answer-card {
+    .modal-card {
       background: #161c3b;
       border: 3px solid var(--neon-yellow);
       border-radius: 24px;
       padding: 24px;
-      width: 90%;
-      max-width: 400px;
+      width: 100%;
+      max-width: 420px;
       text-align: center;
       box-shadow: 0 0 35px rgba(255, 230, 0, 0.3);
+      animation: pop 0.15s ease-out;
+    }
+
+    @keyframes pop {
+      from { transform: scale(0.9); }
+      to { transform: scale(1); }
     }
 
     .ans-input {
       width: 140px;
-      font-size: 36px;
+      font-size: 34px;
       text-align: center;
       padding: 8px;
       background: #0b0e1e;
@@ -351,7 +312,7 @@
       color: #fff;
       font-weight: 900;
       font-family: 'Orbitron', sans-serif;
-      margin: 14px 0;
+      margin: 12px 0;
       outline: none;
     }
 
@@ -368,11 +329,41 @@
       width: 100%;
     }
 
-    .msg-feedback {
-      font-size: 15px;
-      font-weight: 700;
-      margin-top: 12px;
-      min-height: 22px;
+    /* "YOU SUCK" / "YOU GOT ZAPPED" BUZZER SCREEN */
+    .buzz-fail-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(180, 0, 40, 0.95);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 2000;
+      text-align: center;
+      animation: flashFail 0.3s infinite alternate;
+    }
+
+    .buzz-fail-overlay.active { display: flex; }
+
+    @keyframes flashFail {
+      0% { background: rgba(220, 0, 50, 0.95); }
+      100% { background: rgba(80, 0, 20, 0.95); }
+    }
+
+    .fail-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 48px;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 0 0 20px #000;
+      margin: 0;
+    }
+
+    .fail-sub {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--neon-yellow);
+      margin: 14px 0 20px 0;
     }
   </style>
 </head>
@@ -383,12 +374,12 @@
       <div class="zap-logo">&#9889;</div>
       <div>
         <h1>COOL ZAP</h1>
-        <div class="sub-brand">By Aukan &amp; August &bull; 3D Learning Game</div>
+        <div class="sub-brand">Arcade Learning &bull; 4-Player Battle</div>
       </div>
     </div>
   </header>
 
-  <!-- HUB SCREEN: 4 Subjects as designed in their plan -->
+  <!-- HUB VIEW -->
   <div class="view-screen active" id="screenHub">
     <div class="hub-title">&#9889; WELCOME TO COOL ZAP &#9889;</div>
     <div class="tiles-grid">
@@ -396,71 +387,68 @@
       <div class="subject-tile tile-math" onclick="openMathArena()">
         <div class="tile-icon">&#128290;</div>
         <div class="tile-name" style="color: var(--neon-yellow);">MATH</div>
-        <div style="color: #94a3b8; font-size: 14px; margin-top: 6px;">4-Player Zap Battle (1x - 10x &amp; Doubles)</div>
+        <div style="color: #94a3b8; font-size: 13px; margin-top: 6px;">Unpredictable 4-Player Rapid Zap</div>
+      </div>
+
+      <!-- Science (Featured on sketch) -->
+      <div class="subject-tile tile-sci" onclick="openQuickArena('Science')">
+        <div class="tile-icon">&#128300;</div>
+        <div class="tile-name" style="color: var(--neon-cyan);">SCIENCE</div>
+        <div style="color: #94a3b8; font-size: 13px; margin-top: 6px;">Forces, Space &amp; Circuits</div>
+      </div>
+
+      <!-- Health (Featured on sketch) -->
+      <div class="subject-tile tile-health" onclick="openQuickArena('Health')">
+        <div class="tile-icon">&#10084;&#65039;</div>
+        <div class="tile-name" style="color: var(--neon-green);">HEALTH</div>
+        <div style="color: #94a3b8; font-size: 13px; margin-top: 6px;">Energy, Nutrition &amp; Body</div>
       </div>
 
       <!-- Literacy -->
-      <div class="subject-tile tile-lit" onclick="openQuickSubject('Literacy')">
+      <div class="subject-tile tile-lit" onclick="openQuickArena('Literacy')">
         <div class="tile-icon">&#128214;</div>
         <div class="tile-name" style="color: var(--neon-pink);">LITERACY</div>
-        <div style="color: #94a3b8; font-size: 14px; margin-top: 6px;">Spelling &amp; Word Power</div>
-      </div>
-
-      <!-- Health -->
-      <div class="subject-tile tile-health" onclick="openQuickSubject('Health')">
-        <div class="tile-icon">&#10084;&#65039;</div>
-        <div class="tile-name" style="color: var(--neon-green);">HEALTH</div>
-        <div style="color: #94a3b8; font-size: 14px; margin-top: 6px;">Mind, Food &amp; Energy</div>
-      </div>
-
-      <!-- Science -->
-      <div class="subject-tile tile-sci" onclick="openQuickSubject('Science')">
-        <div class="tile-icon">&#128300;</div>
-        <div class="tile-name" style="color: var(--neon-cyan);">SCIENCE</div>
-        <div style="color: #94a3b8; font-size: 14px; margin-top: 6px;">Forces, Space &amp; Nature</div>
+        <div style="color: #94a3b8; font-size: 13px; margin-top: 6px;">Rapid Spelling &amp; Vocabulary</div>
       </div>
     </div>
   </div>
 
-  <!-- 4-PLAYER MATHS ARENA -->
+  <!-- 4-PLAYER RAPID ARENA -->
   <div class="view-screen" id="screenMath">
     <div class="arena-nav">
-      <button class="btn-back" onclick="showScreen('screenHub')">&#8592; Back to Hub</button>
-      <div class="mode-select-row">
-        <button class="mode-chip active" id="chip-mix" onclick="setMode('mix')">Doubles + Times</button>
-        <button class="mode-chip" id="chip-doubles" onclick="setMode('doubles')">Doubles (1+1 to 4+4)</button>
-        <button class="mode-chip" id="chip-times" onclick="setMode('times')">Times (1× to 10×)</button>
-      </div>
+      <button class="btn-back" onclick="showScreen('screenHub')">&#8592; Hub</button>
+      <div style="font-size: 13px; font-weight:800; color:var(--neon-cyan);" id="arenaSubjectLabel">SUBJECT: MATH BATTLE</div>
+      <button class="btn-back" style="background:#401728; border-color:#ff0055;" onclick="triggerFailScreen('Practice Mode')">&#9888; Test Fail Buzzer</button>
     </div>
 
     <div class="arena-screen">
       <div class="question-box">
-        <div class="question-prompt">&#9889; FASTEST BUZZER ZAPS THE POINTS &#9889;</div>
-        <div class="question-text" id="qDisplay">2 + 2 = ?</div>
+        <div class="question-prompt">&#9889; FASTEST BUZZER ZAPS THE ANSWER &#9889;</div>
+        <div class="question-text" id="qDisplay">24 + 17 = ?</div>
       </div>
 
-      <!-- 4 Players (Aukan, August, Student 1, Student 2) -->
+      <!-- 4 Generic Student Docks -->
       <div class="players-grid">
         <div class="player-dock p-red">
-          <div class="p-name" style="color: #ff3366;">Aukan</div>
+          <div class="p-name" style="color: #ff3366;">Student 1</div>
           <div class="p-score" id="score-0">0 PTS</div>
           <button class="btn-zap" onclick="playerBuzz(0)">ZAP!</button>
         </div>
 
         <div class="player-dock p-blue">
-          <div class="p-name" style="color: #00d4ff;">August</div>
+          <div class="p-name" style="color: #00d4ff;">Student 2</div>
           <div class="p-score" id="score-1">0 PTS</div>
           <button class="btn-zap" onclick="playerBuzz(1)">ZAP!</button>
         </div>
 
         <div class="player-dock p-green">
-          <div class="p-name" style="color: #00ff88;">Player 3</div>
+          <div class="p-name" style="color: #00ff88;">Student 3</div>
           <div class="p-score" id="score-2">0 PTS</div>
           <button class="btn-zap" onclick="playerBuzz(2)">ZAP!</button>
         </div>
 
         <div class="player-dock p-yellow">
-          <div class="p-name" style="color: #ffea00;">Player 4</div>
+          <div class="p-name" style="color: #ffea00;">Student 4</div>
           <div class="p-score" id="score-3">0 PTS</div>
           <button class="btn-zap" onclick="playerBuzz(3)">ZAP!</button>
         </div>
@@ -469,30 +457,55 @@
   </div>
 
   <!-- BUZZER ANSWER POPUP -->
-  <div class="answer-modal-overlay" id="answerModal">
-    <div class="answer-card">
-      <h3 id="buzzingPlayer" style="margin: 0; font-family: 'Orbitron', sans-serif; font-size: 20px;"></h3>
-      <p style="color: #94a3b8; font-size: 13px; margin: 4px 0 0 0;">Enter the answer to score +2 Zap Points!</p>
-
-      <div style="font-size: 32px; font-weight: 900; margin: 12px 0; color: #fff;" id="modalQText"></div>
-      <input type="number" id="ansInput" class="ans-input" autocomplete="off" placeholder="?">
-
-      <button class="btn-submit" onclick="submitMathAns()">CONFIRM ZAP</button>
-      <div class="msg-feedback" id="modalFeedback"></div>
+  <div class="modal-overlay" id="answerModal">
+    <div class="modal-card">
+      <h3 id="buzzingPlayer" style="margin: 0; font-family: 'Orbitron', sans-serif; font-size: 18px;"></h3>
+      <div style="font-size: 28px; font-weight: 900; margin: 10px 0; color: #fff;" id="modalQText"></div>
+      <input type="text" id="ansInput" class="ans-input" autocomplete="off" placeholder="?">
+      <button class="btn-submit" onclick="submitAns()">CONFIRM ZAP</button>
     </div>
   </div>
 
+  <!-- THE "YOU SUCK" / "YOU GOT ZAPPED!" BUZZER FAIL SCREEN -->
+  <div class="buzz-fail-overlay" id="failScreen">
+    <div style="font-size: 60px;">💥⚡</div>
+    <h2 class="fail-text">YOU GOT ZAPPED!</h2>
+    <div class="fail-sub" id="failReasonText">INCORRECT ANSWER! -1 POINT</div>
+    <button class="btn-submit" style="max-width:240px; background:#fff; color:#000;" onclick="closeFailScreen()">TRY AGAIN</button>
+  </div>
+
   <script>
+    // Audio Synthesizer (Web Audio API) for instant arcade effects without external audio files
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
+    function playBeep(freq, type, duration) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration);
+    }
+
+    function playZapSound() { playBeep(880, 'sawtooth', 0.1); }
+    function playWinSound() { playBeep(587, 'sine', 0.15); setTimeout(() => playBeep(880, 'sine', 0.25), 120); }
+    function playFailBuzz() { playBeep(130, 'square', 0.4); setTimeout(() => playBeep(98, 'sawtooth', 0.5), 100); }
+
     const players = [
-      { name: "Aukan", score: 0 },
-      { name: "August", score: 0 },
-      { name: "Player 3", score: 0 },
-      { name: "Player 4", score: 0 }
+      { name: "Student 1", score: 0 },
+      { name: "Student 2", score: 0 },
+      { name: "Student 3", score: 0 },
+      { name: "Student 4", score: 0 }
     ];
 
-    let currentMode = "mix"; // 'mix', 'doubles', 'times'
-    let currentAnswer = 0;
+    let currentSubject = "Math";
     let activePlayerIdx = null;
+    let expectedAnswer = "";
 
     function showScreen(id) {
       document.querySelectorAll('.view-screen').forEach(s => s.classList.remove('active'));
@@ -500,91 +513,119 @@
     }
 
     function openMathArena() {
+      currentSubject = "Math";
+      document.getElementById('arenaSubjectLabel').textContent = "SUBJECT: MATH BATTLE";
       showScreen('screenMath');
-      nextQuestion();
+      nextUnpredictableQuestion();
     }
 
-    function openQuickSubject(subjectName) {
-      alert(`⚡ Cool Zap: ${subjectName} portal unlocked! 3D levels loading...`);
+    function openQuickArena(sub) {
+      currentSubject = sub;
+      document.getElementById('arenaSubjectLabel').textContent = `SUBJECT: ${sub.toUpperCase()} RAPID ZAP`;
+      showScreen('screenMath');
+      nextUnpredictableQuestion();
     }
 
-    function setMode(mode) {
-      currentMode = mode;
-      document.getElementById('chip-mix').classList.toggle('active', mode === 'mix');
-      document.getElementById('chip-doubles').classList.toggle('active', mode === 'doubles');
-      document.getElementById('chip-times').classList.toggle('active', mode === 'times');
-      nextQuestion();
-    }
+    // Completely broken pattern: random mixed operations, numbers, and word logic
+    function nextUnpredictableQuestion() {
+      if (currentSubject === "Math") {
+        const types = ['add', 'sub', 'mul', 'missing'];
+        const chosenType = types[Math.floor(Math.random() * types.length)];
 
-    function nextQuestion() {
-      let isTimes = false;
-
-      if (currentMode === "times") {
-        isTimes = true;
-      } else if (currentMode === "doubles") {
-        isTimes = false;
-      } else {
-        // mix
-        isTimes = Math.random() > 0.5;
+        if (chosenType === 'add') {
+          const a = Math.floor(Math.random() * 45) + 15;
+          const b = Math.floor(Math.random() * 45) + 12;
+          expectedAnswer = (a + b).toString();
+          document.getElementById('qDisplay').textContent = `${a} + ${b} = ?`;
+        } else if (chosenType === 'sub') {
+          const a = Math.floor(Math.random() * 60) + 30;
+          const b = Math.floor(Math.random() * (a - 15)) + 5;
+          expectedAnswer = (a - b).toString();
+          document.getElementById('qDisplay').textContent = `${a} - ${b} = ?`;
+        } else if (chosenType === 'mul') {
+          const tables = [3, 4, 6, 7, 8, 9, 12];
+          const a = tables[Math.floor(Math.random() * tables.length)];
+          const b = Math.floor(Math.random() * 8) + 2;
+          expectedAnswer = (a * b).toString();
+          document.getElementById('qDisplay').textContent = `${a} × ${b} = ?`;
+        } else {
+          // Missing number
+          const a = Math.floor(Math.random() * 20) + 10;
+          const target = a + (Math.floor(Math.random() * 25) + 5);
+          expectedAnswer = (target - a).toString();
+          document.getElementById('qDisplay').textContent = `${a} + [ ? ] = ${target}`;
+        }
+      } else if (currentSubject === "Science") {
+        const pool = [
+          { q: "Energy from the Sun is called... (solar/wind)", a: "solar" },
+          { q: "What force pulls objects to Earth? (gravity/magnet)", a: "gravity" },
+          { q: "Is electricity stopped by plastic? (yes/no)", a: "yes" },
+          { q: "A state of matter: Solid, Liquid or...?", a: "gas" }
+        ];
+        const item = pool[Math.floor(Math.random() * pool.length)];
+        expectedAnswer = item.a.toLowerCase();
+        document.getElementById('qDisplay').textContent = item.q;
+      } else if (currentSubject === "Health") {
+        const pool = [
+          { q: "How many glasses of water a day? (2 or 8)", a: "8" },
+          { q: "Which nutrient fuels muscles? (protein/sugar)", a: "protein" },
+          { q: "Heart beats faster when you... (sleep/exercise)", a: "exercise" }
+        ];
+        const item = pool[Math.floor(Math.random() * pool.length)];
+        expectedAnswer = item.a.toLowerCase();
+        document.getElementById('qDisplay').textContent = item.q;
+      } else { // Literacy
+        const pool = [
+          { q: "Past tense of 'run'?", a: "ran" },
+          { q: "Opposite of 'difficult'?", a: "easy" },
+          { q: "A describing word is an... (noun/adjective)", a: "adjective" }
+        ];
+        const item = pool[Math.floor(Math.random() * pool.length)];
+        expectedAnswer = item.a.toLowerCase();
+        document.getElementById('qDisplay').textContent = item.q;
       }
-
-      if (isTimes) {
-        // Times tables 1x to 10x
-        const a = Math.floor(Math.random() * 10) + 1;
-        const b = Math.floor(Math.random() * 10) + 1;
-        currentAnswer = a * b;
-        document.getElementById('qDisplay').textContent = `${a} × ${b} = ?`;
-      } else {
-        // Doubles addition (1+1, 2+2, 4+4, 8+8, etc.)
-        const doubles = [1, 2, 3, 4, 5, 6, 8, 10, 12];
-        const val = doubles[Math.floor(Math.random() * doubles.length)];
-        currentAnswer = val + val;
-        document.getElementById('qDisplay').textContent = `${val} + ${val} = ?`;
-      }
     }
 
-    function playerBuzz(playerIdx) {
-      activePlayerIdx = playerIdx;
-      const p = players[playerIdx];
-
-      document.getElementById('buzzingPlayer').textContent = `⚡ ${p.name} BUZZED IN! ⚡`;
+    function playerBuzz(idx) {
+      activePlayerIdx = idx;
+      playZapSound();
+      document.getElementById('buzzingPlayer').textContent = `⚡ ${players[idx].name} BUZZED IN! ⚡`;
       document.getElementById('modalQText').textContent = document.getElementById('qDisplay').textContent;
       document.getElementById('ansInput').value = '';
-      document.getElementById('modalFeedback').textContent = '';
-
       document.getElementById('answerModal').classList.add('active');
       setTimeout(() => document.getElementById('ansInput').focus(), 80);
     }
 
-    function submitMathAns() {
-      const val = parseInt(document.getElementById('ansInput').value, 10);
-      const fb = document.getElementById('modalFeedback');
+    function submitAns() {
+      const val = document.getElementById('ansInput').value.trim().toLowerCase();
+      document.getElementById('answerModal').classList.remove('active');
 
-      if (isNaN(val)) return;
-
-      if (val === currentAnswer) {
+      if (val === expectedAnswer) {
         players[activePlayerIdx].score += 2;
         document.getElementById(`score-${activePlayerIdx}`).textContent = `${players[activePlayerIdx].score} PTS`;
-        fb.style.color = 'var(--neon-green)';
-        fb.textContent = '⚡ ZAP! CORRECT (+2 PTS) ⚡';
-
-        setTimeout(() => {
-          document.getElementById('answerModal').classList.remove('active');
-          nextQuestion();
-        }, 900);
+        playWinSound();
+        nextUnpredictableQuestion();
       } else {
-        fb.style.color = 'var(--neon-pink)';
-        fb.textContent = `❌ MISS! Answer was ${currentAnswer}`;
-
-        setTimeout(() => {
-          document.getElementById('answerModal').classList.remove('active');
-          nextQuestion();
-        }, 1300);
+        // Penalty & Trigger "You Got Zapped" screen
+        players[activePlayerIdx].score = Math.max(0, players[activePlayerIdx].score - 1);
+        document.getElementById(`score-${activePlayerIdx}`).textContent = `${players[activePlayerIdx].score} PTS`;
+        triggerFailScreen(`${players[activePlayerIdx].name} missed! (Answer was: ${expectedAnswer})`);
       }
     }
 
+    function triggerFailScreen(reason) {
+      playFailBuzz();
+      document.getElementById('failReasonText').textContent = reason;
+      document.getElementById('failScreen').classList.add('active');
+    }
+
+    function closeFailScreen() {
+      document.getElementById('failScreen').classList.remove('active');
+      nextUnpredictableQuestion();
+    }
+
     document.getElementById('ansInput').addEventListener('keyup', (e) => {
-      if (e.key === 'Enter') submitMathAns();
+      if (e.key === 'Enter') submitAns();
     });
   </script>
 </body>
