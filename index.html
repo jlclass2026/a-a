@@ -206,6 +206,19 @@
       letter-spacing: 2px;
     }
 
+    .question-text.word-question {
+      font-size: clamp(20px, 4vw, 28px);
+      line-height: 1.4;
+      letter-spacing: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .question-progress {
+      font-size: 13px;
+      color: #94a3b8;
+      margin-top: 10px;
+    }
+
     .players-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -302,7 +315,8 @@
     }
 
     .ans-input {
-      width: 140px;
+      width: 100%;
+      max-width: 320px;
       font-size: 34px;
       text-align: center;
       padding: 8px;
@@ -425,6 +439,7 @@
       <div class="question-box">
         <div class="question-prompt">&#9889; FASTEST BUZZER ZAPS THE ANSWER &#9889;</div>
         <div class="question-text" id="qDisplay">24 + 17 = ?</div>
+        <div class="question-progress" id="questionProgress" aria-live="polite"></div>
       </div>
 
       <!-- 4 Generic Student Docks -->
@@ -508,6 +523,9 @@
     let expectedAnswer = "";
 
     function showScreen(id) {
+      activePlayerIdx = null;
+      document.getElementById('answerModal').classList.remove('active');
+      document.getElementById('failScreen').classList.remove('active');
       document.querySelectorAll('.view-screen').forEach(s => s.classList.remove('active'));
       document.getElementById(id).classList.add('active');
     }
@@ -526,67 +544,384 @@
       nextUnpredictableQuestion();
     }
 
-    // Completely broken pattern: random mixed operations, numbers, and word logic
-    function nextUnpredictableQuestion() {
-      if (currentSubject === "Math") {
-        const types = ['add', 'sub', 'mul', 'missing'];
-        const chosenType = types[Math.floor(Math.random() * types.length)];
+    // Twenty reviewed questions per subject; each shuffled round uses every
+    // question once. Subject changes keep each subject's place for this visit.
+    const questionBanks = {
+  "Math": [
+    {
+      "q": "24 + 17 = ?",
+      "a": "41"
+    },
+    {
+      "q": "38 + 26 = ?",
+      "a": "64"
+    },
+    {
+      "q": "47 + 35 = ?",
+      "a": "82"
+    },
+    {
+      "q": "59 + 28 = ?",
+      "a": "87"
+    },
+    {
+      "q": "16 + 49 = ?",
+      "a": "65"
+    },
+    {
+      "q": "63 - 28 = ?",
+      "a": "35"
+    },
+    {
+      "q": "80 - 46 = ?",
+      "a": "34"
+    },
+    {
+      "q": "52 - 19 = ?",
+      "a": "33"
+    },
+    {
+      "q": "71 - 26 = ?",
+      "a": "45"
+    },
+    {
+      "q": "89 - 32 = ?",
+      "a": "57"
+    },
+    {
+      "q": "3 × 8 = ?",
+      "a": "24"
+    },
+    {
+      "q": "4 × 7 = ?",
+      "a": "28"
+    },
+    {
+      "q": "6 × 9 = ?",
+      "a": "54"
+    },
+    {
+      "q": "8 × 7 = ?",
+      "a": "56"
+    },
+    {
+      "q": "12 × 6 = ?",
+      "a": "72"
+    },
+    {
+      "q": "14 + [ ? ] = 32",
+      "a": "18"
+    },
+    {
+      "q": "23 + [ ? ] = 48",
+      "a": "25"
+    },
+    {
+      "q": "18 + [ ? ] = 27",
+      "a": "9"
+    },
+    {
+      "q": "29 + [ ? ] = 56",
+      "a": "27"
+    },
+    {
+      "q": "11 + [ ? ] = 35",
+      "a": "24"
+    }
+  ],
+  "Science": [
+    {
+      "q": "Energy from the Sun is called... (solar/wind)",
+      "a": "solar"
+    },
+    {
+      "q": "What force pulls objects towards Earth? (friction/gravity)",
+      "a": "gravity"
+    },
+    {
+      "q": "Plastic is usually an electrical... (insulator/conductor)",
+      "a": "insulator"
+    },
+    {
+      "q": "Solid, liquid and gas are states of... (light/matter)",
+      "a": "matter"
+    },
+    {
+      "q": "What force slows two surfaces rubbing together? (friction/gravity)",
+      "a": "friction"
+    },
+    {
+      "q": "A push or a pull is a... (shadow/force)",
+      "a": "force"
+    },
+    {
+      "q": "Which object is usually attracted to a magnet? (iron nail/wooden spoon)",
+      "a": "iron nail"
+    },
+    {
+      "q": "Two north poles of magnets... (attract/repel)",
+      "a": "repel"
+    },
+    {
+      "q": "A simple bulb circuit needs a complete path for current to flow. (true/false)",
+      "a": "true"
+    },
+    {
+      "q": "Opening a switch breaks a circuit. (true/false)",
+      "a": "true"
+    },
+    {
+      "q": "Which metal is often used inside electrical wires? (copper/wood)",
+      "a": "copper"
+    },
+    {
+      "q": "Earth travels around the... (Moon/Sun)",
+      "a": "sun"
+    },
+    {
+      "q": "Earth spinning causes day and... (night/summer)",
+      "a": "night"
+    },
+    {
+      "q": "The Moon mainly reflects light from the... (Earth/Sun)",
+      "a": "sun"
+    },
+    {
+      "q": "Which planet is known as the Red Planet? (Mars/Venus)",
+      "a": "mars"
+    },
+    {
+      "q": "Liquid water becomes ice when it... (evaporates/freezes)",
+      "a": "freezes"
+    },
+    {
+      "q": "Ice becoming liquid water is called... (melting/freezing)",
+      "a": "melting"
+    },
+    {
+      "q": "Liquid water changing into water vapour is... (condensation/evaporation)",
+      "a": "evaporation"
+    },
+    {
+      "q": "Water vapour cooling into liquid droplets is... (condensation/melting)",
+      "a": "condensation"
+    },
+    {
+      "q": "A shadow forms when an object blocks... (sound/light)",
+      "a": "light"
+    }
+  ],
+  "Health": [
+    {
+      "q": "Which organ pumps blood around the body? (heart/stomach)",
+      "a": "heart"
+    },
+    {
+      "q": "Which organs help us breathe? (kidneys/lungs)",
+      "a": "lungs"
+    },
+    {
+      "q": "Which organ helps us think and remember? (brain/heart)",
+      "a": "brain"
+    },
+    {
+      "q": "Bones work together to form the... (lungs/skeleton)",
+      "a": "skeleton"
+    },
+    {
+      "q": "Muscles help our bodies... (move/hear)",
+      "a": "move"
+    },
+    {
+      "q": "The heart usually beats faster during... (sleep/exercise)",
+      "a": "exercise"
+    },
+    {
+      "q": "Protein helps the body grow and repair. (true/false)",
+      "a": "true"
+    },
+    {
+      "q": "Which nutrient is a main source of energy? (carbohydrate/calcium)",
+      "a": "carbohydrate"
+    },
+    {
+      "q": "Calcium helps build strong bones and... (hair/teeth)",
+      "a": "teeth"
+    },
+    {
+      "q": "Which drink helps replace water lost in sweat? (water/oil)",
+      "a": "water"
+    },
+    {
+      "q": "An apple belongs to which food group? (grains/fruit)",
+      "a": "fruit"
+    },
+    {
+      "q": "A carrot is a... (vegetable/grain)",
+      "a": "vegetable"
+    },
+    {
+      "q": "Eating a variety of foods provides different nutrients. (true/false)",
+      "a": "true"
+    },
+    {
+      "q": "Wash hands with soap and water before... (sleeping/eating)",
+      "a": "eating"
+    },
+    {
+      "q": "Brush teeth with a toothbrush and... (toothpaste/shampoo)",
+      "a": "toothpaste"
+    },
+    {
+      "q": "Sleep helps the body rest and recover. (true/false)",
+      "a": "true"
+    },
+    {
+      "q": "Wear a helmet to help protect your head when... (reading/cycling)",
+      "a": "cycling"
+    },
+    {
+      "q": "A seatbelt helps keep you safer in a... (car/bed)",
+      "a": "car"
+    },
+    {
+      "q": "Cough or sneeze into a tissue or your... (hand/elbow)",
+      "a": "elbow"
+    },
+    {
+      "q": "If you feel worried, you can talk to a trusted... (adult/stranger)",
+      "a": "adult"
+    }
+  ],
+  "Literacy": [
+    {
+      "q": "Past tense of 'run'? (ran/runned)",
+      "a": "ran"
+    },
+    {
+      "q": "Opposite of 'difficult'? (hard/easy)",
+      "a": "easy"
+    },
+    {
+      "q": "A word that describes a noun is an... (adjective/verb)",
+      "a": "adjective"
+    },
+    {
+      "q": "Plural of 'child'? (childs/children)",
+      "a": "children"
+    },
+    {
+      "q": "Past tense of 'go'? (went/goed)",
+      "a": "went"
+    },
+    {
+      "q": "Which word is a noun? (quickly/table)",
+      "a": "table"
+    },
+    {
+      "q": "Which word is the verb in 'I jump high'? (jump/high)",
+      "a": "jump"
+    },
+    {
+      "q": "Which word is an adverb? (chair/slowly)",
+      "a": "slowly"
+    },
+    {
+      "q": "Which word is a pronoun? (they/garden)",
+      "a": "they"
+    },
+    {
+      "q": "Which word joins these ideas: 'I like cats ___ dogs'? (under/and)",
+      "a": "and"
+    },
+    {
+      "q": "Opposite of 'ancient'? (modern/old)",
+      "a": "modern"
+    },
+    {
+      "q": "A synonym for 'happy'? (sad/glad)",
+      "a": "glad"
+    },
+    {
+      "q": "A synonym for 'tiny'? (small/huge)",
+      "a": "small"
+    },
+    {
+      "q": "Which word rhymes with 'light'? (lift/night)",
+      "a": "night"
+    },
+    {
+      "q": "Choose the spelling: (because/becaus)",
+      "a": "because"
+    },
+    {
+      "q": "Choose the spelling: (freind/friend)",
+      "a": "friend"
+    },
+    {
+      "q": "Choose the spelling: (beautiful/beautifull)",
+      "a": "beautiful"
+    },
+    {
+      "q": "Complete: '___ going to the park.' (Their/They're)",
+      "a": "they're"
+    },
+    {
+      "q": "Complete: 'The cat licked ___ paw.' (its/it's)",
+      "a": "its"
+    },
+    {
+      "q": "A question ends with a question... (stop/mark)",
+      "a": "mark"
+    }
+  ]
+};
+    const questionDecks = {};
 
-        if (chosenType === 'add') {
-          const a = Math.floor(Math.random() * 45) + 15;
-          const b = Math.floor(Math.random() * 45) + 12;
-          expectedAnswer = (a + b).toString();
-          document.getElementById('qDisplay').textContent = `${a} + ${b} = ?`;
-        } else if (chosenType === 'sub') {
-          const a = Math.floor(Math.random() * 60) + 30;
-          const b = Math.floor(Math.random() * (a - 15)) + 5;
-          expectedAnswer = (a - b).toString();
-          document.getElementById('qDisplay').textContent = `${a} - ${b} = ?`;
-        } else if (chosenType === 'mul') {
-          const tables = [3, 4, 6, 7, 8, 9, 12];
-          const a = tables[Math.floor(Math.random() * tables.length)];
-          const b = Math.floor(Math.random() * 8) + 2;
-          expectedAnswer = (a * b).toString();
-          document.getElementById('qDisplay').textContent = `${a} × ${b} = ?`;
-        } else {
-          // Missing number
-          const a = Math.floor(Math.random() * 20) + 10;
-          const target = a + (Math.floor(Math.random() * 25) + 5);
-          expectedAnswer = (target - a).toString();
-          document.getElementById('qDisplay').textContent = `${a} + [ ? ] = ${target}`;
-        }
-      } else if (currentSubject === "Science") {
-        const pool = [
-          { q: "Energy from the Sun is called... (solar/wind)", a: "solar" },
-          { q: "What force pulls objects to Earth? (gravity/magnet)", a: "gravity" },
-          { q: "Is electricity stopped by plastic? (yes/no)", a: "yes" },
-          { q: "A state of matter: Solid, Liquid or...?", a: "gas" }
-        ];
-        const item = pool[Math.floor(Math.random() * pool.length)];
-        expectedAnswer = item.a.toLowerCase();
-        document.getElementById('qDisplay').textContent = item.q;
-      } else if (currentSubject === "Health") {
-        const pool = [
-          { q: "How many glasses of water a day? (2 or 8)", a: "8" },
-          { q: "Which nutrient fuels muscles? (protein/sugar)", a: "protein" },
-          { q: "Heart beats faster when you... (sleep/exercise)", a: "exercise" }
-        ];
-        const item = pool[Math.floor(Math.random() * pool.length)];
-        expectedAnswer = item.a.toLowerCase();
-        document.getElementById('qDisplay').textContent = item.q;
-      } else { // Literacy
-        const pool = [
-          { q: "Past tense of 'run'?", a: "ran" },
-          { q: "Opposite of 'difficult'?", a: "easy" },
-          { q: "A describing word is an... (noun/adjective)", a: "adjective" }
-        ];
-        const item = pool[Math.floor(Math.random() * pool.length)];
-        expectedAnswer = item.a.toLowerCase();
-        document.getElementById('qDisplay').textContent = item.q;
+    function shuffleQuestions(items) {
+      const shuffled = items.slice();
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
       }
+      return shuffled;
+    }
+
+    function nextUnpredictableQuestion() {
+      const bank = questionBanks[currentSubject];
+      let deck = questionDecks[currentSubject];
+      if (!deck) {
+        deck = { remaining: [], lastQuestion: null, round: 0 };
+        questionDecks[currentSubject] = deck;
+      }
+      if (deck.remaining.length === 0) {
+        deck.remaining = shuffleQuestions(bank);
+        // The next question is popped from the end. Avoid repeating the last
+        // question of the previous round at the start of the next one.
+        const last = deck.remaining.length - 1;
+        if (last > 0 && deck.remaining[last].q === deck.lastQuestion) {
+          [deck.remaining[0], deck.remaining[last]] = [deck.remaining[last], deck.remaining[0]];
+        }
+        deck.round += 1;
+      }
+      const item = deck.remaining.pop();
+      deck.lastQuestion = item.q;
+      expectedAnswer = item.a;
+      const display = document.getElementById('qDisplay');
+      display.textContent = item.q;
+      display.classList.toggle('word-question', currentSubject !== 'Math');
+      document.getElementById('questionProgress').textContent =
+        `Round ${deck.round} · Question ${bank.length - deck.remaining.length} of ${bank.length}`;
+    }
+
+    function normaliseAnswer(value) {
+      return value.trim().toLowerCase().replace(/[‘’]/g, "'").replace(/\s+/g, ' ');
     }
 
     function playerBuzz(idx) {
+      if (activePlayerIdx !== null ||
+          document.getElementById('failScreen').classList.contains('active') ||
+          !document.getElementById('screenMath').classList.contains('active')) return;
       activePlayerIdx = idx;
       playZapSound();
       document.getElementById('buzzingPlayer').textContent = `⚡ ${players[idx].name} BUZZED IN! ⚡`;
@@ -597,19 +932,24 @@
     }
 
     function submitAns() {
-      const val = document.getElementById('ansInput').value.trim().toLowerCase();
+      // One submission per buzz, including repeated Enter key presses.
+      if (activePlayerIdx === null ||
+          !document.getElementById('answerModal').classList.contains('active')) return;
+      const playerIdx = activePlayerIdx;
+      activePlayerIdx = null;
+      const val = normaliseAnswer(document.getElementById('ansInput').value);
       document.getElementById('answerModal').classList.remove('active');
 
-      if (val === expectedAnswer) {
-        players[activePlayerIdx].score += 2;
-        document.getElementById(`score-${activePlayerIdx}`).textContent = `${players[activePlayerIdx].score} PTS`;
+      if (val === normaliseAnswer(expectedAnswer)) {
+        players[playerIdx].score += 2;
+        document.getElementById(`score-${playerIdx}`).textContent = `${players[playerIdx].score} PTS`;
         playWinSound();
         nextUnpredictableQuestion();
       } else {
         // Penalty & Trigger "You Got Zapped" screen
-        players[activePlayerIdx].score = Math.max(0, players[activePlayerIdx].score - 1);
-        document.getElementById(`score-${activePlayerIdx}`).textContent = `${players[activePlayerIdx].score} PTS`;
-        triggerFailScreen(`${players[activePlayerIdx].name} missed! (Answer was: ${expectedAnswer})`);
+        players[playerIdx].score = Math.max(0, players[playerIdx].score - 1);
+        document.getElementById(`score-${playerIdx}`).textContent = `${players[playerIdx].score} PTS`;
+        triggerFailScreen(`${players[playerIdx].name} missed! (Answer was: ${expectedAnswer})`);
       }
     }
 
@@ -620,6 +960,7 @@
     }
 
     function closeFailScreen() {
+      if (!document.getElementById('failScreen').classList.contains('active')) return;
       document.getElementById('failScreen').classList.remove('active');
       nextUnpredictableQuestion();
     }
